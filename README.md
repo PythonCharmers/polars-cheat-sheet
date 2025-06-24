@@ -1,6 +1,8 @@
 # [Polars](https://www.pola.rs/) cheat sheet
 
-Adapted from Franz Diebold's original [![Polars cheat sheet](https://franzdiebold.github.io/polars-cheat-sheet/Polars_cheat_sheet.png)](https://franzdiebold.github.io/polars-cheat-sheet/Polars_cheat_sheet.pdf)
+Version 2.0: [![Polars cheat sheet](https://github.com/PythonCharmers/Polars Cheat Sheet v2.0.pdf)](https://github.com/PythonCharmers/Polars Cheat Sheet v2.0.pdf)
+
+Adapted from Franz Diebold's original [Polars cheat sheet](https://franzdiebold.github.io/polars-cheat-sheet/Polars_cheat_sheet.pdf)
 
 See accompanying Notebook: [polars-cheat-sheet.ipynb](polars-cheat-sheet.ipynb)
 
