@@ -38,13 +38,6 @@
               <a href="https://www.pola.rs/" target="_blank">Polars</a>
               Cheat Sheet
             </h1>
-            <a
-              href="https://colab.research.google.com/github/FranzDiebold/polars-cheat-sheet/blob/main/polars-cheat-sheet.ipynb"
-              target="_blank"
-              ><img
-                src="https://colab.research.google.com/assets/colab-badge.svg"
-                class="badge"
-            /></a>
           </div>
 
           <h3>General</h3>
@@ -149,7 +142,7 @@
             </p>
             <pre><code class="language-python">df \
   .filter(pl.col("nrs") < 4) \
-  .groupby("groups") \
+  .group_by("groups") \
   .agg(
     pl \
       .all() \
@@ -227,7 +220,7 @@ df.tail(n=2)</code></pre>
                   /></svg></span
             ></a>
             <p>Select multiple columns with specific names</p>
-            <pre><code class="language-python">df.select(["nrs", "names"])</code></pre>
+            <pre><code class="language-python">df.select("nrs", "names")</code></pre>
           </div>
           <div class="group">
             <a
@@ -262,10 +255,9 @@ df.tail(n=2)</code></pre>
           </div>
           <div class="group">
             <p>
-              Select rows meeting logical condition, and only the specific
-              columns
+              Select a single value from a DataFrame
             </p>
-            <pre><code class="language-python">df[df["random"] > 0.5, ["names", "groups"]]</code></pre>
+            <pre><code class="language-python">df.item(row=0, column=0)</code></pre>
           </div>
         </div>
 
@@ -346,8 +338,7 @@ df.tail(n=2)</code></pre>
                   /></svg></span
             ></a>
             <p>Spread rows into columns</p>
-            <pre><code class="hljs nohighlight">df.pivot(<span class="is-underlined underlined-yellow">values</span>=<span class="hljs-string">"nrs"</span>, <span class="is-underlined underlined-green">index</span>=<span class="hljs-string">"groups"</span>,
-         <span class="is-underlined underlined-red">columns</span>=<span class="hljs-string">"names"</span>)</code></pre>
+            <pre><code class="hljs nohighlight">df.pivot(<span class="is-underlined underlined-red">on</span>=<span class="hljs-string">"colnames"</span>, <span class="is-underlined underlined-yellow">values</span>=<span class="hljs-string">"nrs"</span>, <span class="is-underlined underlined-green">index</span>=<span class="hljs-string">"groups"</span>)</code></pre>
           </div>
           <div class="group">
             <a
@@ -366,7 +357,7 @@ df.tail(n=2)</code></pre>
 df.sort("random")
 
 # high to low
-df.sort("random", reverse=True)</code></pre>
+df.sort("random", descending=True)</code></pre>
           </div>
           <div class="group">
             <a
@@ -441,59 +432,58 @@ df.height</code></pre>
             ></a>
             <p>Aggregation functions</p>
             <pre><code class="language-python">df.select(
-    [
-      # Sum values
-      pl.sum("random").alias("sum"),
+    # Sum values
+    pl.sum("random").alias("sum"),
 
-      # Minimum value
-      pl.min("random").alias("min"),
+    # Minimum value
+    pl.min("random").alias("min"),
 
-      # Maximum value
-      pl.max("random").alias("max"),
-      # or
-      pl.col("random").max().alias("other_max"),
+    # Maximum value
+    pl.max("random").alias("max"),
+    # or
+    pl.col("random").max().alias("other_max"),
 
-      # Standard deviation
-      pl.std("random").alias("std dev"),
+    # Standard deviation
+    pl.std("random").alias("std dev"),
 
-      # Variance
-      pl.var("random").alias("variance"),
+    # Variance
+    pl.var("random").alias("variance"),
 
-      # Median
-      pl.median("random").alias("median"),
+    # Median
+    pl.median("random").alias("median"),
 
-      # Mean
-      pl.mean("random").alias("mean"),
+    # Mean
+    pl.mean("random").alias("mean"),
 
-      # Quantile
-      pl.quantile("random", 0.75) \
-        .alias("quantile_0.75"),
-      # or
-      pl.col("random").quantile(0.75) \
-        .alias("other_quantile_0.75"),
+    # Quantile
+    pl.quantile("random", 0.75) \
+      .alias("quantile_0.75"),
+    # or
+    pl.col("random").quantile(0.75) \
+      .alias("other_quantile_0.75"),
 
-      # First value
-      pl.first("random").alias("first"),
-    ]
+    # First value
+    pl.first("random").alias("first"),
 )</code></pre>
           </div>
         </div>
       </div>
-
       <div class="columns info-columns-1">
         <div class="column is-half">
-          <span class="infos">
-            Download at
-            <a href="https://polars.diebold.io" target="_blank"
-              >polars.diebold.io</a
-            >
-          </span>
         </div>
         <div class="column is-half has-text-right">
           <span class="infos-small"
-            >By Franz Diebold (<a href="https://www.diebold.io" target="_blank"
-              >diebold.io</a
-            >), inspired by
+            >Copyright
+            <a
+              href="https://pythoncharmers.com"
+              target="_blank"
+              >Python Charmers</a
+            > and
+            <a
+              href="https://www.diebold.io"
+              target="_blank"
+            >Franz Diebold</a
+            >; inspired by
             <a
               href="https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf"
               target="_blank"
@@ -526,62 +516,57 @@ df.height</code></pre>
             <p>
               Group by values in column named "col", returning a GroupBy object
             </p>
-            <pre><code class="language-python">df.groupby("groups")</code></pre>
+            <pre><code class="language-python">df.group_by("groups")</code></pre>
           </div>
           <div class="group">
             <p>
               All of the aggregation functions from above can be applied to a
               group as well
             </p>
-            <pre><code class="language-python">df.groupby(by="groups").agg(
-  [
-      # Sum values
-      pl.sum("random").alias("sum"),
+            <pre><code class="language-python">df.group_by(by="groups").agg(
+    # Sum values
+    pl.sum("random").alias("sum"),
 
-      # Minimum value
-      pl.min("random").alias("min"),
+    # Minimum value
+    pl.min("random").alias("min"),
 
-      # Maximum value
-      pl.max("random").alias("max"),
-      # or
-      pl.col("random").max().alias("other_max"),
+    # Maximum value
+    pl.max("random").alias("max"),
+    # or
+    pl.col("random").max().alias("other_max"),
 
-      # Standard deviation
-      pl.std("random").alias("std_dev"),
+    # Standard deviation
+    pl.std("random").alias("std_dev"),
 
-      # Variance
-      pl.var("random").alias("variance"),
+    # Variance
+    pl.var("random").alias("variance"),
 
-      # Median
-      pl.median("random").alias("median"),
+    # Median
+    pl.median("random").alias("median"),
 
-      # Mean
-      pl.mean("random").alias("mean"),
+    # Mean
+    pl.mean("random").alias("mean"),
 
-      # Quantile
-      pl.quantile("random", 0.75) \
-        .alias("quantile_0.75"),
-      # or
-      pl.col("random").quantile(0.75) \
-        .alias("other_quantile_0.75"),
+    # Quantile
+    pl.quantile("random", 0.75) \
+      .alias("quantile_0.75"),
+    # or
+    pl.col("random").quantile(0.75) \
+      .alias("other_quantile_0.75"),
 
-      # First value
-      pl.first("random").alias("first"),
-  ]
+    # First value
+    pl.first("random").alias("first"),
 )</code></pre>
           </div>
           <div class="group">
             <p>Additional GroupBy functions</p>
-            <pre><code class="language-python">df.groupby(by="groups").agg(
-  [
+            <pre><code class="language-python">df.group_by(by="groups").agg(
     # Count the number of values in each group
     pl.count("random").alias("size"),
 
     # Sample one element in each group
-    pl.col("names").apply(
-      lambda group_df: group_df.sample(1)
-    ),
-  ]
+    pl.col("names").sample(1).first() \
+      .alias("random name")
 )</code></pre>
           </div>
         </div>
@@ -657,7 +642,7 @@ df.height</code></pre>
           </div>
           <div class="group">
             <a
-              href="https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.DataFrame.with_column.html"
+              href="https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.DataFrame.with_columns.html"
               target="_blank"
             >
               <span class="icon"
@@ -667,9 +652,9 @@ df.height</code></pre>
                     d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"
                   /></svg></span
             ></a>
-            <p>Add a new columns to the DataFrame</p>
-            <pre><code class="language-python">df.with_column(
-  (pl.col("random") * pl.col("nrs")) \
+            <p>Add one new column to the DataFrame</p>
+            <pre><code class="language-python">df.with_columns(
+  pl.col("random") * pl.col("nrs") \
     .alias("product")
 )</code></pre>
           </div>
@@ -687,17 +672,15 @@ df.height</code></pre>
             ></a>
             <p>Add several new columns to the DataFrame</p>
             <pre><code class="language-python">df.with_columns(
-    [
-        (pl.col("random") * pl.col("nrs")) \
-          .alias("product"),
-        pl.col("names").str.lengths() \
-          .alias("names_lengths"),
-    ]
+    (pl.col("random") * pl.col("nrs")) \
+      .alias("product"),
+    pl.col("names").str.lengths() \
+      .alias("names_lengths"),
 )</code></pre>
           </div>
           <div class="group">
             <a
-              href="https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.DataFrame.with_row_count.html"
+              href="https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.DataFrame.with_row_index.html"
               target="_blank"
             >
               <span class="icon"
@@ -707,8 +690,8 @@ df.height</code></pre>
                     d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"
                   /></svg></span
             ></a>
-            <p>Add a column at index 0 that counts the rows</p>
-            <pre><code class="language-python">df.with_row_count()</code></pre>
+            <p>Add a row index as the first column</p>
+            <pre><code class="language-python">df.with_row_index()</code></pre>
           </div>
         </div>
 
@@ -720,67 +703,65 @@ df.height</code></pre>
           <div class="group">
             <p>The following rolling functions are available</p>
             <pre><code class="language-python">df.select(
-    [
-        # Rolling maximum value
-        pl.col("random") \
-          .rolling_max(window_size=2) \
-          .alias("rolling_max"),
+    # Rolling maximum value
+    pl.col("random") \
+      .rolling_max(window_size=2) \
+      .alias("rolling_max"),
 
-        # Rolling mean value
-        pl.col("random") \
-          .rolling_mean(window_size=2) \
-          .alias("rolling_mean"),
+    # Rolling mean value
+    pl.col("random") \
+      .rolling_mean(window_size=2) \
+      .alias("rolling_mean"),
 
-        # Rolling median value
-        pl.col("random") \
-          .rolling_median(
-              window_size=2, min_periods=2) \
-          .alias("rolling_median"),
+    # Rolling median value
+    pl.col("random") \
+      .rolling_median(
+          window_size=2, min_samples=2) \
+      .alias("rolling_median"),
 
-        # Rolling minimum value
-        pl.col("random") \
-          .rolling_min(window_size=2) \
-          .alias("rolling_min"),
+    # Rolling minimum value
+    pl.col("random") \
+      .rolling_min(window_size=2) \
+      .alias("rolling_min"),
 
-        # Rolling standard deviation
-        pl.col("random") \
-          .rolling_std(window_size=2) \
-          .alias("rolling_std"),
+    # Rolling standard deviation
+    pl.col("random") \
+      .rolling_std(window_size=2) \
+      .alias("rolling_std"),
 
-        # Rolling sum values
-        pl.col("random") \
-          .rolling_sum(window_size=2) \
-          .alias("rolling_sum"),
+    # Rolling sum values
+    pl.col("random") \
+      .rolling_sum(window_size=2) \
+      .alias("rolling_sum"),
 
-        # Rolling variance
-        pl.col("random") \
-          .rolling_var(window_size=2) \
-          .alias("rolling_var"),
+    # Rolling variance
+    pl.col("random") \
+      .rolling_var(window_size=2) \
+      .alias("rolling_var"),
 
-        # Rolling quantile
-        pl.col("random") \
-          .rolling_quantile(
-            quantile=0.75, window_size=2,
-            min_periods=2
-          ) \
-          .alias("rolling_quantile"),
+    # Rolling quantile
+    pl.col("random") \
+      .rolling_quantile(
+        quantile=0.75, window_size=2,
+        min_samples=2
+      ) \
+      .alias("rolling_quantile"),
 
-        # Rolling skew
-        pl.col("random") \
-          .rolling_skew(window_size=2) \
-          .alias("rolling_skew"),
+    # Rolling skew
+    pl.col("random") \
+      .rolling_skew(window_size=2) \
+      .alias("rolling_skew"),
 
-        # Rolling custom function
-        pl.col("random") \
-          .rolling_apply(
-            function=np.nanstd, window_size=2) \
-          .alias("rolling_apply"),
-    ]
+    # Rolling custom function
+    pl.col("random") \
+      .rolling_map(
+        function=np.nanstd, window_size=2) \
+      .alias("rolling_apply"),
 )</code></pre>
           </div>
         </div>
         <div class="column is-3">
-          <h3>Window Functions</h3>
+          <h3>Window Functions (over)</h3>
           <div class="group">
             <a
               href="https://pola-rs.github.io/polars-book/user-guide/notebooks/introduction_polars-py.html#window-functions"
@@ -794,17 +775,15 @@ df.height</code></pre>
                   /></svg></span
             ></a>
             <p>
-              Window functions allow to group by several columns simultaneously
+              Aggregate over all rows in one group:
             </p>
             <pre><code class="language-python">df.select(
-    [
-        "names",
-        "groups",
-        pl.col("random").sum().over("names") \
-          .alias("sum_by_names"),
-        pl.col("random").sum().over("groups") \
-          .alias("sum_by_groups"),
-    ]
+    "names",
+    "groups",
+    pl.col("random").sum().over("names") \
+      .alias("sum_by_names"),
+    pl.col("random").sum().over("groups") \
+      .alias("sum_by_groups"),
 )</code></pre>
           </div>
 
@@ -863,20 +842,22 @@ df.join(df4, on="nrs", how="inner")</code></pre>
         </div>
       </div>
 
-      <div class="columns info-columns-2">
+      <div class="columns info-columns-1">
         <div class="column is-half">
-          <span class="infos">
-            Download at
-            <a href="https://polars.diebold.io" target="_blank"
-              >polars.diebold.io</a
-            >
-          </span>
         </div>
         <div class="column is-half has-text-right">
           <span class="infos-small"
-            >By Franz Diebold (<a href="https://www.diebold.io" target="_blank"
-              >diebold.io</a
-            >), inspired by
+            >Copyright
+            <a
+              href="https://pythoncharmers.com"
+              target="_blank"
+              >Python Charmers</a
+            > and
+            <a
+              href="https://www.diebold.io"
+              target="_blank"
+            >Franz Diebold</a
+            >; inspired by
             <a
               href="https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf"
               target="_blank"
